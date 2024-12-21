@@ -1,11 +1,14 @@
 package mail
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tnqbao/gau_validation/config"
 	"github.com/tnqbao/gau_validation/providers"
 )
 
@@ -33,7 +36,12 @@ func SendOTPMail(c *gin.Context) {
 				<div>If you did not request this code, please ignore this email.</p`, otpCode),
 	}
 	MailSender(c, res)
-	c.Set("otp", otpCode)
-
-	c.JSON(http.StatusOK, gin.H{"status": fmt.Sprintf(`sent otp to %s`, *req.Mail), "otp": otpCode})
+	ctx := context.Background()
+	redisClient := config.GetRedisClient()
+	err := redisClient.Set(ctx, "otp:"+*req.Mail, otpCode, 30*time.Minute).Err()
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to set cache"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": fmt.Sprintf(`sent otp to %s`, *req.Mail)})
 }
