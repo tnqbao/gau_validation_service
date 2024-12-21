@@ -23,7 +23,8 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 
 			mailRoutes := validateRoutes.Group("/mail")
 			{
-				mailRoutes.POST("/otp", mail.SendOTPMail)
+				mailRoutes.POST("/get-otp", mail.SendOTPMail)
+				mailRoutes.POST("/check-otp", mail.CheckOTP)
 			}
 		}
 	}
