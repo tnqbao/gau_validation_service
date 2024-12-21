@@ -28,9 +28,10 @@ jobs:
             echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
             echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            echo "REDIS_ADDR"=${{ secrets.REDIS_ADDR }}" >> .env
-            echo "SMTP_PASSWORD"=${{ secrets.SMTP_PASSWORD }}" >> .env
-            echo "SMTP_USERNAME"=${{ secrets.SMTP_USERNAME }}" >> .env
+            echo "REDIS_ADDR=${{ secrets.REDIS_ADDR }}" >> .env
+            echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
+            echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" >> .env
+
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
