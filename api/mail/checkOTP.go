@@ -14,27 +14,39 @@ import (
 func CheckOTP(c *gin.Context) {
 	var req providers.RequestMail
 	if err := c.ShouldBindJSON(&req); err != nil {
-		log.Println("UserRequest binding error:", err)
+		log.Printf("Request binding error: %v\n", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format: " + err.Error()})
 		return
 	}
+
 	if req.Mail == nil || *req.Mail == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User email is required"})
 		return
 	}
+
+	if req.Content == nil || *req.Content == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "OTP content is required"})
+		return
+	}
+
 	ctx := context.Background()
 	redisClient := config.GetRedisClient()
 	key := "otp:" + *req.Mail
+
 	otpCode, err := redisClient.Get(ctx, key).Result()
 	if err == redis.Nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "OTP not found"})
 		return
 	} else if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get OTP"})
+		log.Printf("Failed to get OTP from Redis: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
-	if req.Content != &otpCode {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid OTP"})
+
+	if *req.Content != otpCode {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid OTP"})
+		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "email verified"})
+
+	c.JSON(http.StatusOK, gin.H{"message": "Email verified"})
 }

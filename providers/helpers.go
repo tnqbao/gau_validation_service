@@ -15,3 +15,7 @@ func GenCaptchaCode() string {
 
 	return string(codes[:])
 }
+
+// func UpdateUser(user User) {
+
+// }
