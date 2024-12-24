@@ -8,6 +8,5 @@ RUN go build -o main .
 FROM alpine:latest
 WORKDIR /gau_validation
 COPY --from=builder /gau_validation/main .
-COPY .env .
 EXPOSE 8081
 CMD ["./main"]
