@@ -40,6 +40,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/.operator
-            sh restart_gau_validation_service.sh
+            sh restart_gau_validation_service_staging.sh
             cd ~/gau_staging
             sh start.sh
