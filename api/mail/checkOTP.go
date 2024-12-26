@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
-	"github.com/tnqbao/gau_validation/config"
-	"github.com/tnqbao/gau_validation/providers"
+	"github.com/tnqbao/gau_validation_service/config"
+	"github.com/tnqbao/gau_validation_service/providers"
 )
 
 func CheckOTP(c *gin.Context) {
@@ -45,6 +45,12 @@ func CheckOTP(c *gin.Context) {
 
 	if *req.Content != otpCode {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid OTP"})
+		return
+	}
+
+	if err := providers.UpdateUserBooleanField("is_email_verified", true, c); err != nil {
+		log.Printf("Failed to update user: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user status"})
 		return
 	}
 

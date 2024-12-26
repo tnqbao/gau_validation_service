@@ -32,6 +32,7 @@ jobs:
             echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
             echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" >> .env
 
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 

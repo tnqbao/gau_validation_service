@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tnqbao/gau_validation/config"
-	"github.com/tnqbao/gau_validation/providers"
+	"github.com/tnqbao/gau_validation_service/config"
+	"github.com/tnqbao/gau_validation_service/providers"
 )
 
 func SendOTPMail(c *gin.Context) {
