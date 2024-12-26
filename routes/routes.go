@@ -2,9 +2,9 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	healthcheck "github.com/tnqbao/gau_validation/api/healthcheck"
-	mail "github.com/tnqbao/gau_validation/api/mail"
-	"github.com/tnqbao/gau_validation/middlewares"
+	healthcheck "github.com/tnqbao/gau_validation_service/api/healthcheck"
+	mail "github.com/tnqbao/gau_validation_service/api/mail"
+	"github.com/tnqbao/gau_validation_service/middlewares"
 	"gorm.io/gorm"
 )
 

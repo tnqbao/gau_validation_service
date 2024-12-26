@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tnqbao/gau_validation/providers"
+	"github.com/tnqbao/gau_validation_service/providers"
 	gomail "gopkg.in/mail.v2"
 )
 
