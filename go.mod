@@ -10,7 +10,6 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/joho/godotenv v1.5.1
-	github.com/tnqbao/gau_user_service v0.0.0-20241226101539-eba1fd65142b
 	gopkg.in/mail.v2 v2.3.1
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12

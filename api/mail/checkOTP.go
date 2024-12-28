@@ -48,11 +48,5 @@ func CheckOTP(c *gin.Context) {
 		return
 	}
 
-	if err := providers.UpdateUserBooleanField("is_email_verified", true, c); err != nil {
-		log.Printf("Failed to update user: %v\n", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user status"})
-		return
-	}
-
 	c.JSON(http.StatusOK, gin.H{"message": "Email verified"})
 }
