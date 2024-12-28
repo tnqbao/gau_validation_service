@@ -32,7 +32,7 @@ func MailSender(c *gin.Context, res providers.ResponseMail) {
 		<body>
 			<div class="container">
 				<div class="header">
-					<h1>Bing bong, %s</h1>
+					<h1>%s</h1>
 				</div>
 				%s
 				<div class="footer">
