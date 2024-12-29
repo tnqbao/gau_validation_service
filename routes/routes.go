@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	healthcheck "github.com/tnqbao/gau_validation_service/api/healthcheck"
 	mail "github.com/tnqbao/gau_validation_service/api/mail"
+	sms "github.com/tnqbao/gau_validation_service/api/sms"
 	"github.com/tnqbao/gau_validation_service/middlewares"
 	"gorm.io/gorm"
 )
@@ -25,6 +26,12 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 			{
 				mailRoutes.POST("/get-otp", mail.SendOTPMail)
 				mailRoutes.POST("/check-otp", mail.CheckOTP)
+			}
+
+			smsRoutes := validateRoutes.Group("/sms")
+			{
+				smsRoutes.POST("/get-otp", sms.SendOTPSMS)
+				smsRoutes.POST("/check-otp", sms.CheckOTPSMS)
 			}
 		}
 	}
