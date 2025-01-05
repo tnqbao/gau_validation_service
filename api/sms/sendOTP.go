@@ -26,24 +26,21 @@ func SendOTPSMS(c *gin.Context) {
 
 	content := "Your OTP code is: " + otpCode
 
-	response, err := providers.SendSMSWithTextbelt(*req.Phone, content)
+	sid, err := providers.SendSMSWithTwilio(*req.Phone, content)
 	if err != nil {
 		log.Println("Failed to send SMS:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send OTP SMS"})
 		return
 	}
 
-	if response["success"] != true {
-		log.Println("Textbelt API error:", response)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send OTP SMS"})
-		return
-	}
+	log.Printf("SMS sent successfully, SID: %s", sid)
 
 	ctx := context.Background()
 	redisClient := config.GetRedisClient()
 	err = redisClient.Set(ctx, "otp:"+*req.Phone, otpCode, 30*time.Minute).Err()
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to set cache"})
+		log.Println("Failed to set OTP in Redis:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to set cache"})
 		return
 	}
 
