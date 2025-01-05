@@ -19,9 +19,11 @@ func InitRedis() {
 		if redisAddr == "" {
 			redisAddr = "gau-redis:6379"
 		}
-
+		redisPassword := os.Getenv("REDIS_PASSWORD")
 		client := redis.NewClient(&redis.Options{
-			Addr: redisAddr,
+			Addr:     redisAddr,
+			Password: redisPassword,
+			DB:       0,
 		})
 
 		ctx := context.Background()
