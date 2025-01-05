@@ -1,15 +1,13 @@
 package providers
 
 import (
-	"bytes"
-	"encoding/json"
+	"fmt"
+	"github.com/twilio/twilio-go"
+	openapi "github.com/twilio/twilio-go/rest/api/v2010"
 	"math/rand"
-	"net/http"
+	"os"
 	"time"
 )
-
-const TextbeltAPIEndpoint = "https://textbelt.com/text"
-const TextbeltAPIKey = "textbelt"
 
 func GenCaptchaCode() string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -22,28 +20,27 @@ func GenCaptchaCode() string {
 	return string(codes[:])
 }
 
-func SendSMSWithTextbelt(phone string, message string) (map[string]interface{}, error) {
-	data := map[string]interface{}{
-		"phone":   phone,
-		"message": message,
-		"key":     TextbeltAPIKey,
-	}
+func SendSMSWithTwilio(phone string, message string) (string, error) {
+	var (
+		TwilioAccountSID  = os.Getenv("TWILIO_ACCOUNT_SID")
+		TwilioAuthToken   = os.Getenv("TWILIO_AUTH_TOKEN")
+		TwilioPhoneNumber = os.Getenv("TWILIO_PHONE_NUMBER")
+	)
 
-	jsonData, err := json.Marshal(data)
+	client := twilio.NewRestClientWithParams(twilio.ClientParams{
+		Username: TwilioAccountSID,
+		Password: TwilioAuthToken,
+	})
+
+	params := &openapi.CreateMessageParams{}
+	params.SetTo(phone)
+	params.SetFrom(TwilioPhoneNumber)
+	params.SetBody(message)
+
+	resp, err := client.Api.CreateMessage(params)
 	if err != nil {
-		return nil, err
+		return "", fmt.Errorf("failed to send SMS: %v", err)
 	}
 
-	resp, err := http.Post(TextbeltAPIEndpoint, "application/json", bytes.NewBuffer(jsonData))
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var response map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return nil, err
-	}
-
-	return response, nil
+	return *resp.Sid, nil
 }
