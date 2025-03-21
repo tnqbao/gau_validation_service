@@ -52,7 +52,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/.operator
+            script: |
+            cd ~/docker-services/base-application-layer
             sh restart_gau_validation_service.sh
-            cd ~/gau
-            sh start.sh
